@@ -1,0 +1,42 @@
+2. Write a kernel module that exports a function myexport(),invoke myexport()
+   function from other module (dependent module).
+   
+   Verify the following:
+a) Observe meta files generated when the first module (exportmod.c) is built
+   --exportmod.mod.c
+   --Module.symvers
+
+b) Observe files of dependent module (depmod1.c)
+   --depmod1.mod.c
+   --Module.symvers
+
+c) Try building dependent module from a different folder
+   --Folder1
+     --exportmod.c
+     --Makefile
+   --Folder2
+     --depmod1.c
+     --Makefile
+
+-------------------------------------------------------------------------------
+
+Results:
+--------
+
+a) No Signatures for the Exported Symbols in the exportmod.mod.c.
+   It is a header file for the .ko
+   The Module.symvers file contains the linkage signatures of the exported 
+   symbols.
+
+b) No Signatures for the symbols used from other modules are found in the 
+   depmod1.mod.c
+   The Module.symvers file is also blank.
+   We get warning related to missing/unresolved symbols while building the .ko
+
+c) The depmod1.mod.c only gets updated with signatures of symbols used from other 
+   modules, when we copy the Module.symvers file from exportmod folder to this
+   location.
+
+   However if we copy or we dont copy the symvers file it doesnt matter for the 
+   insmod.
+   The insmod fails unless the exportmod.ko is inserted first.

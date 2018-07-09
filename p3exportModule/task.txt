@@ -1,0 +1,35 @@
+2. Write a kernel module that exports a function myexport(),invoke myexport()
+   function from other module (dependent module).
+   
+   Verify the following:
+a) Observe meta files generated when the first module (exportmod.c) is built
+   --exportmod.mod.c
+   --Module.symvers
+
+b) Observe files of dependent module (depmod2.c)
+   --depmod2.mod.c
+   --Module.symvers
+
+c) Try building dependent module and load it.
+
+Verify using lsmod and dmesg
+
+-------------------------------------------------------------------------------
+
+Results:
+--------
+
+a) No Signatures for the Exported Symbols in the exportmod.mod.c.
+   It is a header file for the .ko
+   The Module.symvers file contains the linkage signatures of the exported 
+   symbols.
+
+b) No Signatures for the symbols used from other modules are found in the 
+   depmod2.mod.c. Instead the __symbol_get() and __symbol_put() linkage 
+   signature is found.
+
+c) The depmod2.mod.c always gets loaded. It then searches for the exported 
+   symbols in memory. If they are not found then it reports that and continues
+   execution. It is runtime loading of symbols.
+   If the symbols are already resident in memory then they are linked at 
+   runtime and are resolved.

@@ -1,0 +1,27 @@
+1. Write a "helloWorld" kernel module with init and exit routines and execute
+   the following tests:
+a) insert module
+b) try inserting module with init function returning -1
+c) remove init and exit functions and try inserting module
+d) remove init function and try inserting module
+e) remove exit function and try inserting module
+f) try inserting module without MODULE_LICENSE Macro
+
+Verify results for each of the above tests with lsmod and dmesg commands.
+------------------------------------------------------------------------------
+
+Results :
+---------
+a) Successful.
+b) Building Successful with No Warnings.
+   Failed while insmod is called.
+   If we return 1 or other number then also build successful.
+   After inserting we get warning about return value not being 0.
+c) Successful.
+d) Successful.
+e) Successfully inserted but cant remove module.
+   Module is only removed after system reboot.
+f) Gives Warning about Missing License during Build.
+   After inserting gives warning about unspecified license and reports
+   tainting of kernel.
+   Insert operation and Cleanup Operation Successful. 
